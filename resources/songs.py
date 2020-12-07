@@ -9,7 +9,7 @@ from playhouse.shortcuts import model_to_dict
 
 # first argument is blueprints name  (songs.py)
 # second argument is it's import_name
-dog = Blueprint('songs', 'song')
+song = Blueprint('songs', 'song')
 
 @song.route('/', methods=["GET"])
 def get_all_songs():
@@ -34,4 +34,4 @@ def create_songs():
     # Change the model to a dict
     print(model_to_dict(song), 'model to dict')
     song_dict = model_to_dict(song)
-    return jsonify(data=song_dict, status{"code": 201, "message": "Success"})
+    return jsonify(data=song_dict, status={"code": 201, "message": "Success"})
