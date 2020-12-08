@@ -28,7 +28,7 @@ def after_request(response):
 # Add Cors support
 CORS(song, origins=['http://localhost:3000'], supports_credentials=True)
 
-# register blueprint
+# register blueprint: in order to use the song blueprint in songs.py
 app.register_blueprint(song, url_prefix='/api/v1/songs')
 
 # The default URL ends in / ("my-website.com/").

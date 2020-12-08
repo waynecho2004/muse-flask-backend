@@ -10,9 +10,13 @@ from playhouse.shortcuts import model_to_dict
 # first argument is blueprints name  (songs.py)
 # second argument is it's import_name
 song = Blueprint('songs', 'song')
+## Example using the blueprint:  
+##    @song.route('/'):
+##        Add views to song blueprint using the route decorator
 
 ## INDEX ROUTE
-@song.route('/', methods=["GET"])
+# Add views to song blueprint using the route decorator
+@song.route('/', methods=["GET"])   
 def get_all_songs():
     ## find the songs and change each one to a dictionary into a new array
     try:
@@ -64,3 +68,12 @@ def update_song(id):
     except models.DoesNotExist:
         return jsonify(data={}, status={"code": 401, "message": "Error updating a song"})
 
+## DELETE
+@song.route('/<id>', methods=["Delete"])
+def delete_song(id):
+    try:
+        query = models.Song.delete().where(models.Song.id==id)
+        query.execute()
+        return jsonify(data='resource successfully deleted', status={"code": 200, "message": "resource deleted successfully"})    
+    except models.DoesNotExist:
+        return jsonify(data={}, status={"code": 401, "message": "Error deleting a song"})        
