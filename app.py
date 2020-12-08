@@ -26,7 +26,7 @@ def after_request(response):
     return response
 
 # Add Cors support
-CORS(song, origins=['http://localhost:3000'], supports_credentials=True) 
+CORS(song, origins=['http://localhost:3000'], supports_credentials=True)
 
 # register blueprint
 app.register_blueprint(song, url_prefix='/api/v1/songs')
