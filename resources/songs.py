@@ -1,5 +1,6 @@
 import models
 from flask import Blueprint, jsonify, request
+from flask_login import login_user, current_user, login_required
 
 # playhouse.shortcuts (from peewee) is a module contains helper 
 # functions for expressing things that would otherwise be somewhat 
@@ -16,29 +17,36 @@ song = Blueprint('songs', 'song')
 
 ## INDEX ROUTE
 # Add views to song blueprint using the route decorator
-@song.route('/', methods=["GET"])   
+@song.route('/', methods=["GET"]) 
+@login_required  
 def get_all_songs():
     ## find the songs and change each one to a dictionary into a new array
     try:
         songs = [model_to_dict(song) for song in models.Song.select()]
         print(songs)  # logging
+        # By default, the current_user is just the id of the logged in user.
+        print(current_user, " <-- current user")
         return jsonify(data=songs, status={"code": 200, "message": "Success"})
     except models.DoesNotExist:
         return jsonify(data={}, status={"code": 401, "message": "Error getting the resources"})
 
 ## SHOW ROUTE
 @song.route('/<id>', methods=["GET"])
+@login_required
 def get_one_song(id):
     try:
         print(id, 'reserved word?')
         song = models.Song.get_by_id(id)
         print(song.__dict__)
+        # By default, the current_user is just the id of the logged in user.
+        print(current_user, " <-- current user")
         return jsonify(data=model_to_dict(song), status={"code": 200, "message": "Success"})  
     except models.DoesNotExist:
         return jsonify(data={}, status={"code": 401, "message": "Error getting the resources"})
 
 ## POST ROUTE
 @song.route('/', methods=["POST"])
+@login_required
 def create_songs():
     ## see request payload anagolous to req.body in express
     try:
@@ -70,6 +78,7 @@ def update_song(id):
 
 ## DELETE
 @song.route('/<id>', methods=["Delete"])
+@login_required
 def delete_song(id):
     try:
         query = models.Song.delete().where(models.Song.id==id)
