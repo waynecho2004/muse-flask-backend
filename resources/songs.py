@@ -73,7 +73,7 @@ def update_song(id):
 def delete_song(id):
     try:
         query = models.Song.delete().where(models.Song.id==id)
-        query.execute()
+        query.execute() # you have to execute the update queries
         return jsonify(data='resource successfully deleted', status={"code": 200, "message": "resource deleted successfully"})    
     except models.DoesNotExist:
         return jsonify(data={}, status={"code": 401, "message": "Error deleting a song"})        
